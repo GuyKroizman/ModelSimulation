@@ -16,37 +16,15 @@ public class Dispatcher : MonoBehaviour {
 
     private Kooloobamba kooloobamba;
 
-    class Mover
-    {
-        private float SPEED = 2;
 
-        GameObject thingToMove;
-        Vector3 destination;
-
-        public Mover(GameObject movee, Vector3 dest)
-        {
-            thingToMove = movee;
-            destination = dest;
-        }
-        internal void Update()
-        {
-            float step = SPEED * Time.deltaTime;
-            thingToMove.transform.position = Vector3.MoveTowards(thingToMove.transform.position, destination, step);
-        }
-
-        internal bool IsReachedDestination()
-        {
-            return Vector3.Distance(thingToMove.transform.position, destination) < 0.1;
-        }
-    }
 
     class Kooloobamba
     {
-        private List<Mover> movers = new List<Mover>();
+        private List<GameObjectMover> movers = new List<GameObjectMover>();
 
         public void Update()
         {
-            var toRemove = new List<Mover>();
+            var toRemove = new List<GameObjectMover>();
 
             foreach (var mover in movers)
             {
@@ -66,7 +44,7 @@ public class Dispatcher : MonoBehaviour {
             }
         }
 
-        internal void Add(Mover t)
+        internal void Add(GameObjectMover t)
         {
             movers.Add(t);
         }
@@ -89,7 +67,7 @@ public class Dispatcher : MonoBehaviour {
         kooloobamba = new Kooloobamba();
         currentBatch = CreateBatch();
 
-        var t = new Mover(currentBatch, GetFillPosition());
+        var t = new GameObjectMover(currentBatch, GetFillPosition());
         kooloobamba.Add(t); 
 
         currentDestinationIndex = 0;
@@ -123,7 +101,7 @@ public class Dispatcher : MonoBehaviour {
         {
             packetCounter = 0;
 
-            var t = new Mover(currentBatch, GetNextDestination().transform.position);
+            var t = new GameObjectMover(currentBatch, GetNextDestination().transform.position);
             kooloobamba.Add(t);
 
             LoadNewBatch();
@@ -136,7 +114,7 @@ public class Dispatcher : MonoBehaviour {
     {
         currentBatch = CreateBatch();
 
-        var t = new Mover(currentBatch, GetFillPosition());
+        var t = new GameObjectMover(currentBatch, GetFillPosition());
         kooloobamba.Add(t);
     }
 
